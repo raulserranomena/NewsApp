@@ -10,6 +10,7 @@
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
     android:orientation="horizontal"
+    app:cardBackgroundColor="@color/colorPrimaryDark"
     app:cardCornerRadius="4dp">
 
     <LinearLayout

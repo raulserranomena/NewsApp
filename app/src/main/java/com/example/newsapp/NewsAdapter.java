@@ -3,7 +3,11 @@ package com.example.newsapp;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +24,12 @@ import java.util.List;
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> {
 
     private static final String TAG = "NewsAdapter";
+
+    //String that can have some format to use later
+    private SpannableStringBuilder spannableTitleString = new SpannableStringBuilder("");
+
+    //new TypedValue "colorValue" to store color value from resource later
+    private TypedValue colorValue = new TypedValue();
 
     private List<NewsData> mNewsList;
     private Context mContext;
@@ -67,7 +77,24 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
                 .load(mNewsList.get(position).getNewsThumbnailLink())
                 .into(holder.mNewsImage);
 
-        holder.mNewsTitle.setText(mNewsList.get(position).getNewsTitle());
+
+        //get the color value from the AppTheme;
+        mContext.getTheme().resolveAttribute(R.attr.colorAccent, colorValue, true);
+
+        spannableTitleString.clear();
+        //we add to the spannableTitleString the tag of the currentNews
+        spannableTitleString.append(mNewsList.get(position).getNewsTag());
+        //add a "/ " at the end of the string
+        spannableTitleString.append("/ ");
+        //here we are colouring the String to the accent color of the them
+        spannableTitleString.setSpan(new ForegroundColorSpan(colorValue.data), 0, spannableTitleString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        //we are adding the title of the current News
+        spannableTitleString.append(mNewsList.get(position).getNewsTitle());
+
+
+        //here we set the title of the news to the corresponding holder object
+        holder.mNewsTitle.setText(spannableTitleString);
+        //here we set the Text of the news to the corresponding holder object
         holder.mNewsText.setText(mNewsList.get(position).getNewsTrailText());
 
     }
